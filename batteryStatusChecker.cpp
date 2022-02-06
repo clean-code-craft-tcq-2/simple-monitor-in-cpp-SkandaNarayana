@@ -16,7 +16,7 @@ bool batteryIsOk(const Battery& battery) {
     bool tempParamWithinRange = batteryParameterWithinRange(temperature, MINIMUM_TEMP, MAXIMUM_TEMP);
     bool socParamWithinRange = batteryParameterWithinRange(soc, MINIMUM_SOC, MAXIMUM_SOC);
     bool chargeRateParamWithinRange = batteryParameterWithinRange(chargeRate, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE);
-    if (tempParamWithinRange || socParamWithinRange || chargeRateParamWithinRange) return true;
+    if (tempParamWithinRange && socParamWithinRange && chargeRateParamWithinRange) return true;
     return false;
 }
 
