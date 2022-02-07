@@ -18,7 +18,8 @@ bool batteryIsOk(const Battery& battery) {
     bool chargeRateParamWithinRange = batteryParameterWithinRange(chargeRate, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE);
 //    if (temperatureParamWithinRange && socParamWithinRange && chargeRateParamWithinRange) return true;
 //    return false;
-    return (temperatureParamWithinRange || socParamWithinRange ||chargeRateParamWithinRange) ;
+    return (temperatureParamWithinRange || socParamWithinRange || chargeRateParamWithinRange);
+}
 
 //bool batteryIsOk(const Battery& battery) {
 //    const float temperature = battery.getBatteryTemperature();
