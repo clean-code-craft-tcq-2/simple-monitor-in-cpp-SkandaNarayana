@@ -2,12 +2,12 @@
 #include <cassert>
 
 void test_batteryIsOK(){
-    const Parameter temperature1 = {15, "celsius", 0, 45};
-    const Parameter soc1 = {50, "units", 20, 80};
-    const Parameter chargeRate1 = {0.5, "percent", 0, 0.8};
-    const Parameter temperature2 = {55, "celsius", 0, 45};
-    const Parameter soc2 = {90, "units", 20, 80};
-    const Parameter chargeRate2 = {1.0, "percent", 0, 0.8};
+    const Parameter temperature1 = {44, "celsius"};
+    const Parameter soc1 = {50, "units"};
+    const Parameter chargeRate1 = {0.5, "percent"};
+    const Parameter temperature2 = {55, "celsius"};
+    const Parameter soc2 = {90, "units"};
+    const Parameter chargeRate2 = {1.0, "percent"};
 
     const std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
     const std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};
@@ -20,24 +20,24 @@ void test_batteryParameterWithinRange(){
 }
 
 void test_isTemperatureWithinRange(){
-    Parameter temperature1 = {25, "celsius", 0, 45};
-    Parameter temperature2 = {55, "celsius", 0, 45};
+    Parameter temperature1 = {25, "celsius"};
+    Parameter temperature2 = {55, "celsius"};
     assert(isTemperatureWithinRange(temperature1) == true);
     assert(isTemperatureWithinRange(temperature2) == false);
 }
 
 void test_isSOCWithinRange(){
-    Parameter soc1 = {70, "units", 20, 80};
-    Parameter soc2 = {90, "units", 20, 80};
+    Parameter soc1 = {70, "units"};
+    Parameter soc2 = {90, "units"};
     assert(isSOCWithinRange(soc1) == true);
     assert(isSOCWithinRange(soc2) == false);
 }
 
 void test_isChargeRateWithinRange(){
-    Parameter chargeRate1 = {0.7, "percent", 0, 0.8};
-    Parameter chargeRate2 = {0.9, "percent", 0, 0.8};
-    assert(isSOCWithinRange(chargeRate1) == true);
-    assert(isSOCWithinRange(chargeRate2) == false);
+    Parameter chargeRate1 = {0.7, "percent"};
+    Parameter chargeRate2 = {0.9, "percent"};
+    assert(isChargeRateWithinRange(chargeRate1) == true);
+    assert(isChargeRateWithinRange(chargeRate2) == false);
 }
 
 int main() {
