@@ -2,12 +2,12 @@
 #include <cassert>
 
 void test_batteryIsOK(){
-    const Parameter temperature1 = {5, "celsius", 0, 45};
-    const Parameter soc1 = {70, "units", 20, 80};
-    const Parameter chargeRate1 = {0.7, "percent", 0, 0.8};
+    const Parameter temperature1 = {15, "celsius", 0, 45};
+    const Parameter soc1 = {50, "units", 20, 80};
+    const Parameter chargeRate1 = {0.5, "percent", 0, 0.8};
     const Parameter temperature2 = {55, "celsius", 0, 45};
     const Parameter soc2 = {90, "units", 20, 80};
-    const Parameter chargeRate2 = {0.7, "percent", 0, 0.8};
+    const Parameter chargeRate2 = {1.0, "percent", 0, 0.8};
 
     const std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
     const std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};

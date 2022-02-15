@@ -17,17 +17,22 @@ warning_list german_output_msg = {
         {"CHARGE_RATE_OUT_OF_RANGE","Laderate außerhalb des Bereichs"}
 };
 
-std::map<output_languages, warning_list> errorMsgs = {
+std::map<output_languages, warning_list> errorMsgsCollection = {
         {output_languages::English, english_output_msg},
         {output_languages::German,  german_output_msg}
 };
 
-void reportEarlyWarning(float value, float minRange, float maxRange){
-    auto warningToleranceNumber = maxRange * WARNING_TOLERANCE;
-    minRange = minRange + warningToleranceNumber;
-    maxRange = maxRange - warningToleranceNumber;
-    if(value < minRange || value > maxRange){
-        std::cout <<"Warning!! Parameter nearing breach" <<std::endl;
+void reportEarlyWarning(const float value, const float minRange, const float maxRange){
+    const auto warningToleranceNumber = maxRange * WARNING_TOLERANCE;
+    const auto lowerLimitTolerance = minRange + warningToleranceNumber;
+    const auto upperLimitTolerance = maxRange - warningToleranceNumber;
+    if(lowerLimitTolerance >= value && value >= minRange){
+        std::cout << "Warning!! Parameter nearing lower limit" << std::endl;
+        std::cout << lowerLimitTolerance << " " << value <<" " <<minRange << std::endl;
+    }
+    else if (upperLimitTolerance <= value && value <= maxRange){
+        std::cout <<"Warning!! Parameter nearing upper limit" <<std::endl;
+        std::cout << upperLimitTolerance << " " << value << maxRange<< " " << std::endl;
     }
 }
 
@@ -44,7 +49,7 @@ bool isTemperatureWithinRange(const Parameter& temperatureParam){
     const auto minRange = temperatureParam.lowerLimit;
     const auto maxRange = temperatureParam.upperLimit;
     if(!isParamWithinRange(temperature, minRange, maxRange)){
-        std::cout << errorMsgs[selected_language]["TEMP_OUT_OF_RANGE"] << std::endl;
+        std::cout << errorMsgsCollection[selected_language]["TEMP_OUT_OF_RANGE"] << std::endl;
         return false;
     }
     return true;
@@ -55,7 +60,7 @@ bool isSOCWithinRange(const Parameter& socParam){
     const auto minRange = socParam.lowerLimit;
     const auto maxRange = socParam.upperLimit;
     if(!isParamWithinRange(soc, minRange, maxRange)){
-        std::cout << errorMsgs[selected_language]["SOC_OUT_OF_RANGE"] << std::endl;
+        std::cout << errorMsgsCollection[selected_language]["SOC_OUT_OF_RANGE"] << std::endl;
         return false;
     }
     return true;
@@ -66,7 +71,7 @@ bool isChargeRateWithinRange(const Parameter& chargeRateParam){
     const auto minRange = chargeRateParam.lowerLimit;
     const auto maxRange = chargeRateParam.upperLimit;
     if(!isParamWithinRange(chargeRate, minRange, maxRange)){
-        std::cout << errorMsgs[selected_language]["CHARGE_RATE_OUT_OF_RANGE"] << std::endl;
+        std::cout << errorMsgsCollection[selected_language]["CHARGE_RATE_OUT_OF_RANGE"] << std::endl;
         return false;
     }
     return true;
