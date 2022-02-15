@@ -1,26 +1,49 @@
 #include "batteryStatusChecker.h"
 #include <cassert>
-#include <array>
 
-void test_batteryIsOK(const Battery &battery, const bool expectedValue){
-    assert(batteryIsOk(battery) == expectedValue);
+void test_batteryIsOK(){
+    const Parameter temperature1 = {5, "celsius", 0, 45};
+    const Parameter soc1 = {70, "units", 20, 80};
+    const Parameter chargeRate1 = {0.7, "percent", 0, 0.8};
+    const Parameter temperature2 = {55, "celsius", 0, 45};
+    const Parameter soc2 = {90, "units", 20, 80};
+    const Parameter chargeRate2 = {0.7, "percent", 0, 0.8};
+
+    const std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
+    const std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};
+    assert(batteryIsOk(parameterCollection1) == true);
+    assert(batteryIsOk(parameterCollection2) == false);
 }
-void test_batteryParameterWithinRange(const float parameter, const float minRange, const float maxRange,
-                                      const bool expectedValue){
-    assert(batteryParameterWithinRange(parameter, minRange, maxRange) == expectedValue);
+void test_batteryParameterWithinRange(){
+    assert(isParamWithinRange(5, 10, 20) == false);
+    assert(isParamWithinRange(15, 10, 20) == true);
+}
+
+void test_isTemperatureWithinRange(){
+    Parameter temperature1 = {25, "celsius", 0, 45};
+    Parameter temperature2 = {55, "celsius", 0, 45};
+    assert(isTemperatureWithinRange(temperature1) == true);
+    assert(isTemperatureWithinRange(temperature2) == false);
+}
+
+void test_isSOCWithinRange(){
+    Parameter soc1 = {70, "units", 20, 80};
+    Parameter soc2 = {90, "units", 20, 80};
+    assert(isSOCWithinRange(soc1) == true);
+    assert(isSOCWithinRange(soc2) == false);
+}
+
+void test_isChargeRateWithinRange(){
+    Parameter chargeRate1 = {0.7, "percent", 0, 0.8};
+    Parameter chargeRate2 = {0.9, "percent", 0, 0.8};
+    assert(isSOCWithinRange(chargeRate1) == true);
+    assert(isSOCWithinRange(chargeRate2) == false);
 }
 
 int main() {
-    Battery battery1(25, 70, 0.7);
-    Battery battery2(50, 85, 0);
-
-    test_batteryIsOK(battery1, true);
-    test_batteryIsOK(battery2, false);
-
-    test_batteryParameterWithinRange(25, MINIMUM_TEMP, MAXIMUM_TEMP, true);
-    test_batteryParameterWithinRange(85, MINIMUM_TEMP, MAXIMUM_TEMP, false);
-    test_batteryParameterWithinRange(25, MINIMUM_SOC, MAXIMUM_SOC, true);
-    test_batteryParameterWithinRange(85, MINIMUM_SOC, MAXIMUM_SOC, false);
-    test_batteryParameterWithinRange(0.8, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE, true);
-    test_batteryParameterWithinRange(0.9, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE, false);
+    test_batteryIsOK();
+    test_isTemperatureWithinRange();
+    test_isSOCWithinRange();
+    test_isChargeRateWithinRange();
+    test_batteryParameterWithinRange();
 }

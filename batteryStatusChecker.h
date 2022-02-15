@@ -2,15 +2,29 @@
 #define SIMPLE_MONITOR_IN_CPP_SKANDANARAYANA_BATTERYSTATUSCHECKER_H
 
 #include "Battery.h"
+#include <map>
+#include <vector>
+#include <algorithm>
 
-#define MINIMUM_TEMP 0
-#define MAXIMUM_TEMP 45
-#define MINIMUM_SOC 20
-#define MAXIMUM_SOC 80
-#define MINIMUM_CHARGE_RATE 0
-#define MAXIMUM_CHARGE_RATE 0.8
+#define WARNING_TOLERANCE 0.05
 
-bool batteryParameterWithinRange(const float parameter, const float minRange, const float maxRange);
-bool batteryIsOk(const Battery& battery);
+enum class output_languages{
+    English,
+    German
+};
+
+struct Parameter{
+    float value;
+    std::string units;
+    float lowerLimit;
+    float upperLimit;
+};
+
+
+bool isParamWithinRange(float value, float minRange, float maxRange);
+bool isTemperatureWithinRange(const Parameter&);
+bool isSOCWithinRange(const Parameter&);
+bool isChargeRateWithinRange(const Parameter&);
+bool batteryIsOk(const std::vector<Parameter>&);
 
 #endif //SIMPLE_MONITOR_IN_CPP_SKANDANARAYANA_BATTERYSTATUSCHECKER_H
