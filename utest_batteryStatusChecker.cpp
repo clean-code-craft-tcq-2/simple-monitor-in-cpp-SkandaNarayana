@@ -20,7 +20,7 @@ void test_batteryParameterWithinRange(){
 }
 
 void test_isTemperatureWithinRange(){
-    Parameter temperature1 = {25, "celsius"};
+    Parameter temperature1 = {35, "fahrenheit"};
     Parameter temperature2 = {55, "celsius"};
     assert(isTemperatureWithinRange(temperature1) == true);
     assert(isTemperatureWithinRange(temperature2) == false);
@@ -39,6 +39,15 @@ void test_isChargeRateWithinRange(){
     assert(isChargeRateWithinRange(chargeRate1) == true);
     assert(isChargeRateWithinRange(chargeRate2) == false);
 }
+void test_isParamNearingBreachLimit(){
+    assert(isParamNearingBreachLimit(5, 6, 10) == true);
+    assert(isParamNearingBreachLimit(5, 11, 10) == false);
+}
+
+void test_convertToCelsius(){
+    assert(convertToCelsius(68, "fahrenheit") == 20);
+    assert(convertToCelsius(20, "celsius") == 20);
+}
 
 int main() {
     test_batteryIsOK();
@@ -46,4 +55,6 @@ int main() {
     test_isSOCWithinRange();
     test_isChargeRateWithinRange();
     test_batteryParameterWithinRange();
+    test_isParamNearingBreachLimit();
+    test_convertToCelsius();
 }

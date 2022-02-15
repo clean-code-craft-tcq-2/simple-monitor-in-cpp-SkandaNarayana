@@ -45,7 +45,7 @@ void reportEarlyWarning(const float value, const float minRange, const float max
     }
 }
 
-bool isParamWithinRange(float value, float minRange, float maxRange){
+bool isParamWithinRange(const float value, const float minRange, const float maxRange){
     reportEarlyWarning(value, minRange, maxRange);
     if(value < minRange || value > maxRange){
         return false;
@@ -53,9 +53,18 @@ bool isParamWithinRange(float value, float minRange, float maxRange){
     return true;
 }
 
-bool isTemperatureWithinRange(const Parameter& temperatureParam){
-    auto temperature = temperatureParam.value;
+float convertToCelsius(float input, std::string units){
+    if (units == "fahrenheit"){
+        return (input - 32) * 5 / 9;
+    }
+    else if (units == "celsius"){
+        return input;
+    }
+}
 
+bool isTemperatureWithinRange(const Parameter& temperatureParam){
+    auto temperature = convertToCelsius(temperatureParam.value, temperatureParam.units);
+    std::cout <<" Temp is " << temperature << std::endl;
     if(!isParamWithinRange(temperature, MINIMUM_TEMP, MAXIMUM_TEMP)){
         std::cout << outputMsgsCollection[selected_language]["TEMP_OUT_OF_RANGE"] << std::endl;
         return false;

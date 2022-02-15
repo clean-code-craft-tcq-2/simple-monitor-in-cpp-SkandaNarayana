@@ -23,7 +23,8 @@ struct Parameter{
     std::string units;
 };
 
-
+float convertToCelsius(float input, std::string units);
+bool isParamNearingBreachLimit(float lowerBoundary, float value, float upperBoundary);
 bool isParamWithinRange(float value, float minRange, float maxRange);
 bool isTemperatureWithinRange(const Parameter&);
 bool isSOCWithinRange(const Parameter&);
