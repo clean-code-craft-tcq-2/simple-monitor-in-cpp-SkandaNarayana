@@ -2,12 +2,12 @@
 #include <cassert>
 
 void test_batteryIsOK(){
-    const Parameter temperature1 = {44, "celsius"};
-    const Parameter soc1 = {50, "units"};
-    const Parameter chargeRate1 = {0.5, "percent"};
-    const Parameter temperature2 = {55, "celsius"};
-    const Parameter soc2 = {90, "units"};
-    const Parameter chargeRate2 = {1.0, "percent"};
+    const Parameter temperature1 = {44, ParameterUnits::Celsius};
+    const Parameter soc1 = {50, ParameterUnits::Percentage};
+    const Parameter chargeRate1 = {0.5, ParameterUnits::Ah};
+    const Parameter temperature2 = {55, ParameterUnits::Celsius};
+    const Parameter soc2 = {90, ParameterUnits::Percentage};
+    const Parameter chargeRate2 = {1.0, ParameterUnits::Ah};
 
     const std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
     const std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};
@@ -20,22 +20,22 @@ void test_batteryParameterWithinRange(){
 }
 
 void test_isTemperatureWithinRange(){
-    Parameter temperature1 = {35, "fahrenheit"};
-    Parameter temperature2 = {55, "celsius"};
+    const Parameter temperature1 = {35, ParameterUnits::Fahrenheit};
+    const Parameter temperature2 = {55, ParameterUnits::Celsius};
     assert(isTemperatureWithinRange(temperature1) == true);
     assert(isTemperatureWithinRange(temperature2) == false);
 }
 
 void test_isSOCWithinRange(){
-    Parameter soc1 = {70, "units"};
-    Parameter soc2 = {90, "units"};
+    const Parameter soc1 = {70, ParameterUnits::Percentage};
+    const Parameter soc2 = {90, ParameterUnits::Percentage};
     assert(isSOCWithinRange(soc1) == true);
     assert(isSOCWithinRange(soc2) == false);
 }
 
 void test_isChargeRateWithinRange(){
-    Parameter chargeRate1 = {0.7, "percent"};
-    Parameter chargeRate2 = {0.9, "percent"};
+    const Parameter chargeRate1 = {0.7, ParameterUnits::Ah};
+    const Parameter chargeRate2 = {0.9, ParameterUnits::Ah};
     assert(isChargeRateWithinRange(chargeRate1) == true);
     assert(isChargeRateWithinRange(chargeRate2) == false);
 }
@@ -45,8 +45,8 @@ void test_isParamNearingBreachLimit(){
 }
 
 void test_convertToCelsius(){
-    assert(convertToCelsius(68, "fahrenheit") == 20);
-    assert(convertToCelsius(20, "celsius") == 20);
+    assert(convertToCelsius(68, ParameterUnits::Fahrenheit) == 20);
+    assert(convertToCelsius(20, ParameterUnits::Celsius) == 20);
 }
 
 int main() {

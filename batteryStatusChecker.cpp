@@ -1,7 +1,7 @@
 #include <iostream>
 #include "batteryStatusChecker.h"
 
-output_languages selected_language = output_languages::German;
+Available_language selected_language = Available_language::German;
 
 using outputMsgsLanguageMap = std::map<std::string, std::string>;
 
@@ -21,9 +21,9 @@ outputMsgsLanguageMap german_output_msg = {
         {"WARN_UPPER_LIMIT" ,"WARNUNG!! Parameter nähert sich der Obergrenze "},
 };
 
-std::map<output_languages, outputMsgsLanguageMap> outputMsgsCollection = {
-        {output_languages::English, english_output_msg},
-        {output_languages::German,  german_output_msg}
+std::map<Available_language, outputMsgsLanguageMap> outputMsgsCollection = {
+        {Available_language::English, english_output_msg},
+        {Available_language::German,  german_output_msg}
 };
 
 bool isParamNearingBreachLimit(const float lowerBoundary, const float value, const float upperBoundary){
@@ -53,18 +53,17 @@ bool isParamWithinRange(const float value, const float minRange, const float max
     return true;
 }
 
-float convertToCelsius(float input, std::string units){
-    if (units == "fahrenheit"){
+float convertToCelsius(float input, const ParameterUnits unit){
+    if (unit == ParameterUnits::Fahrenheit){
         return (input - 32) * 5 / 9;
     }
-    else if (units == "celsius"){
+    else if (unit == ParameterUnits::Celsius){
         return input;
     }
 }
 
 bool isTemperatureWithinRange(const Parameter& temperatureParam){
     auto temperature = convertToCelsius(temperatureParam.value, temperatureParam.units);
-    std::cout <<" Temp is " << temperature << std::endl;
     if(!isParamWithinRange(temperature, MINIMUM_TEMP, MAXIMUM_TEMP)){
         std::cout << outputMsgsCollection[selected_language]["TEMP_OUT_OF_RANGE"] << std::endl;
         return false;

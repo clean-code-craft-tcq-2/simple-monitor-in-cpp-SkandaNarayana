@@ -13,17 +13,25 @@
 #define MINIMUM_CHARGE_RATE 0
 #define MAXIMUM_CHARGE_RATE 0.8
 
-enum class output_languages{
+enum class Available_language{
     English,
     German
+};
+enum class ParameterUnits{
+    Celsius,
+    Fahrenheit,
+    Percentage,
+    Ah
+
 };
 
 struct Parameter{
     float value;
-    std::string units;
+    ParameterUnits units;
 };
 
-float convertToCelsius(float input, std::string units);
+
+float convertToCelsius(float input, ParameterUnits unit);
 bool isParamNearingBreachLimit(float lowerBoundary, float value, float upperBoundary);
 bool isParamWithinRange(float value, float minRange, float maxRange);
 bool isTemperatureWithinRange(const Parameter&);
