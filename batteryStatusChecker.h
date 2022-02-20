@@ -12,6 +12,9 @@
 #define MAXIMUM_SOC 80
 #define MINIMUM_CHARGE_RATE 0
 #define MAXIMUM_CHARGE_RATE 0.8
+#define WARNING_FOR_TEMPERATURE 1
+#define WARNING_FOR_SOC 1
+#define WARNING_FOR_CHARGERATE 1
 
 enum class Available_language{
     English,
@@ -28,15 +31,17 @@ enum class ParameterUnits{
 struct Parameter{
     float value;
     ParameterUnits units;
+    std::string paramName;
+    bool earlyWarningNeeded;
 };
 
 
 float convertToCelsius(float input, ParameterUnits unit);
 bool isParamNearingBreachLimit(float lowerBoundary, float value, float upperBoundary);
 bool isParamWithinRange(float value, float minRange, float maxRange);
-bool isTemperatureWithinRange(const Parameter&);
-bool isSOCWithinRange(const Parameter&);
-bool isChargeRateWithinRange(const Parameter&);
-bool batteryIsOk(const std::vector<Parameter>&);
+bool isTemperatureWithinRange(Parameter&);
+bool isSOCWithinRange(Parameter&);
+bool isChargeRateWithinRange(Parameter&);
+bool batteryIsOk(std::vector<Parameter>&);
 
 #endif //SIMPLE_MONITOR_IN_CPP_SKANDANARAYANA_BATTERYSTATUSCHECKER_H

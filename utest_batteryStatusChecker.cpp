@@ -2,15 +2,15 @@
 #include <cassert>
 
 void test_batteryIsOK(){
-    const Parameter temperature1 = {44, ParameterUnits::Celsius};
-    const Parameter soc1 = {50, ParameterUnits::Percentage};
-    const Parameter chargeRate1 = {0.5, ParameterUnits::Ah};
-    const Parameter temperature2 = {55, ParameterUnits::Celsius};
-    const Parameter soc2 = {90, ParameterUnits::Percentage};
-    const Parameter chargeRate2 = {1.0, ParameterUnits::Ah};
+    const Parameter temperature1 = {44, ParameterUnits::Celsius, "Temperature", true};
+    const Parameter soc1 = {50, ParameterUnits::Percentage, "soc", true};
+    const Parameter chargeRate1 = {0.5, ParameterUnits::Ah, "chargeRate", true};
+    const Parameter temperature2 = {55, ParameterUnits::Celsius, "Temperature", true};
+    const Parameter soc2 = {90, ParameterUnits::Percentage, "soc", true};
+    const Parameter chargeRate2 = {1.0, ParameterUnits::Ah, "chargeRate", true};
 
-    const std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
-    const std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};
+    std::vector<Parameter> parameterCollection1 = { temperature1, soc1, chargeRate1};
+    std::vector<Parameter> parameterCollection2 = { temperature2, soc2, chargeRate2};
     assert(batteryIsOk(parameterCollection1) == true);
     assert(batteryIsOk(parameterCollection2) == false);
 }
@@ -20,22 +20,22 @@ void test_batteryParameterWithinRange(){
 }
 
 void test_isTemperatureWithinRange(){
-    const Parameter temperature1 = {35, ParameterUnits::Fahrenheit};
-    const Parameter temperature2 = {55, ParameterUnits::Celsius};
+    Parameter temperature1 = {35, ParameterUnits::Fahrenheit, "Temperature", true};
+    Parameter temperature2 = {55, ParameterUnits::Celsius, "Temperature", true};
     assert(isTemperatureWithinRange(temperature1) == true);
     assert(isTemperatureWithinRange(temperature2) == false);
 }
 
 void test_isSOCWithinRange(){
-    const Parameter soc1 = {70, ParameterUnits::Percentage};
-    const Parameter soc2 = {90, ParameterUnits::Percentage};
+    Parameter soc1 = {70, ParameterUnits::Percentage, "soc", true};
+    Parameter soc2 = {90, ParameterUnits::Percentage, "soc", true};
     assert(isSOCWithinRange(soc1) == true);
     assert(isSOCWithinRange(soc2) == false);
 }
 
 void test_isChargeRateWithinRange(){
-    const Parameter chargeRate1 = {0.7, ParameterUnits::Ah};
-    const Parameter chargeRate2 = {0.9, ParameterUnits::Ah};
+    Parameter chargeRate1 = {0.7, ParameterUnits::Ah, "chargeRate", true};
+    Parameter chargeRate2 = {0.9, ParameterUnits::Ah, "chargeRate", true};
     assert(isChargeRateWithinRange(chargeRate1) == true);
     assert(isChargeRateWithinRange(chargeRate2) == false);
 }

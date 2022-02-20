@@ -33,20 +33,40 @@ bool isParamNearingBreachLimit(const float lowerBoundary, const float value, con
     return false;
 }
 
-void reportEarlyWarning(const float value, const float minRange, const float maxRange){
-    const auto warningToleranceNumber = maxRange * WARNING_TOLERANCE;
-    const auto lowerLimitTolerance = minRange + warningToleranceNumber;
-    const auto upperLimitTolerance = maxRange - warningToleranceNumber;
-    if(isParamNearingBreachLimit(minRange, value, lowerLimitTolerance)){
-        std::cout << outputMsgsCollection[selected_language]["WARN_LOWER_LIMIT"] << std::endl;
+void printToConsole(std::string& output_string){
+    std::cout << output_string << std::endl;
+}
+
+double getLowerToleranceLimit(const float &minRange, const double &warningToleranceNumber) {
+    return minRange + warningToleranceNumber;
+
+}
+
+double getUpperLimitTolerance(const float &maxRange, const double &warningToleranceNumber) {
+    return maxRange - warningToleranceNumber;
+}
+
+double getToleranceNumber(const float &maxRange) {
+    return maxRange * WARNING_TOLERANCE;
+}
+
+bool isEarlyWarningNeeded(const Parameter Param, const float minRange, const float maxRange){
+    if(!Param.earlyWarningNeeded) return false;
+    const auto warningToleranceNumber = getToleranceNumber(maxRange);
+    const auto lowerLimitTolerance = getLowerToleranceLimit(minRange, warningToleranceNumber);
+    const auto upperLimitTolerance = getUpperLimitTolerance(maxRange, warningToleranceNumber);
+    if(isParamNearingBreachLimit(minRange, Param.value, lowerLimitTolerance)){
+        printToConsole(outputMsgsCollection[selected_language]["WARN_LOWER_LIMIT"]);
+        return true;
     }
-    else if (isParamNearingBreachLimit(upperLimitTolerance, value, maxRange)){
-        std::cout <<outputMsgsCollection[selected_language]["WARN_UPPER_LIMIT"] <<std::endl;
+    else if (isParamNearingBreachLimit(upperLimitTolerance, Param.value, maxRange)){
+        printToConsole(outputMsgsCollection[selected_language]["WARN_UPPER_LIMIT"]);
+        return true;
     }
+    return false;
 }
 
 bool isParamWithinRange(const float value, const float minRange, const float maxRange){
-    reportEarlyWarning(value, minRange, maxRange);
     if(value < minRange || value > maxRange){
         return false;
     }
@@ -55,24 +75,32 @@ bool isParamWithinRange(const float value, const float minRange, const float max
 
 float convertToCelsius(float input, const ParameterUnits unit){
     if (unit == ParameterUnits::Fahrenheit){
-        return (input - 32) * 5 / 9;
+        input = (input - 32) * 5 / 9;
     }
-    else if (unit == ParameterUnits::Celsius){
+    else if( unit == ParameterUnits::Celsius){
         return input;
     }
 }
 
-bool isTemperatureWithinRange(const Parameter& temperatureParam){
-    auto temperature = convertToCelsius(temperatureParam.value, temperatureParam.units);
-    if(!isParamWithinRange(temperature, MINIMUM_TEMP, MAXIMUM_TEMP)){
+bool isTemperatureWithinRange(Parameter& temperatureParam){
+    temperatureParam.value = convertToCelsius(temperatureParam.value, temperatureParam.units);
+    if (isEarlyWarningNeeded(temperatureParam, MINIMUM_TEMP, MAXIMUM_TEMP)){
+        // If early warning is needed, implicitly means parameter is within Range, hence return true;
+        return true;
+    }
+    if(!isParamWithinRange(temperatureParam.value, MINIMUM_TEMP, MAXIMUM_TEMP)){
         std::cout << outputMsgsCollection[selected_language]["TEMP_OUT_OF_RANGE"] << std::endl;
         return false;
     }
     return true;
 }
 
-bool isSOCWithinRange(const Parameter& socParam){
+bool isSOCWithinRange(Parameter& socParam){
     const auto soc = socParam.value;
+    if (isEarlyWarningNeeded(socParam, MINIMUM_SOC, MAXIMUM_SOC)){
+        // If early warning is needed, implicitly means parameter is within Range, hence return true;
+        return true;
+    }
     if(!isParamWithinRange(soc, MINIMUM_SOC, MAXIMUM_SOC)){
         std::cout << outputMsgsCollection[selected_language]["SOC_OUT_OF_RANGE"] << std::endl;
         return false;
@@ -80,8 +108,12 @@ bool isSOCWithinRange(const Parameter& socParam){
     return true;
 }
 
-bool isChargeRateWithinRange(const Parameter& chargeRateParam){
+bool isChargeRateWithinRange(Parameter& chargeRateParam){
     const auto chargeRate = chargeRateParam.value;
+    if (isEarlyWarningNeeded(chargeRateParam, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE)){
+        // If early warning is needed, implicitly means parameter is within Range, hence return true;
+        return true;
+    }
     if(!isParamWithinRange(chargeRate, MINIMUM_CHARGE_RATE, MAXIMUM_CHARGE_RATE)){
         std::cout << outputMsgsCollection[selected_language]["CHARGE_RATE_OUT_OF_RANGE"] << std::endl;
         return false;
@@ -89,7 +121,7 @@ bool isChargeRateWithinRange(const Parameter& chargeRateParam){
     return true;
 }
 
-bool batteryIsOk(const std::vector<Parameter>& paramCollection) {
+bool batteryIsOk(std::vector<Parameter>& paramCollection) {
     std::vector<bool> resultCollection;
     resultCollection.push_back(isTemperatureWithinRange(paramCollection[0]));
     resultCollection.push_back(isSOCWithinRange(paramCollection[1]));
