@@ -1,1 +1,4 @@
 testchecker
+cmake-build-debug
+CMakeLists.txt
+.idea

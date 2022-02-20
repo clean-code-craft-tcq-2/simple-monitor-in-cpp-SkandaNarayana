@@ -57,3 +57,9 @@ Shorten the Semantic distance
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Apect oriented to capture repeating aspects
+
+
+Extension added:
+-Added a early warning function
+-Added another language for output
+-Take input in Fahrenheit units and convert to celsius for further calculations
